@@ -1,0 +1,27 @@
+﻿<!-- ko foreach: items -->
+<input type="checkbox" data-bind="checkedValue: $data, checked: $root.chosenItems" />
+<span data-bind="text: itemName"></span>
+<!-- /ko -->
+
+<div>
+    <pre data-bind="text: ko.toJSON(viewModel, null, 2)"></pre>
+</div>
+
+<div>
+    <pre data-bind="text: ko.toJSON(chosenItems, null, 2)"></pre>
+</div>
+
+@section scripts
+{
+    <script type="text/javascript">
+        var viewModel = {
+            items: ko.observableArray([
+                { itemName: 'Choice 1' },
+                { itemName: 'Choice 2' }
+            ]),
+            chosenItems: ko.observableArray()
+        };
+
+        ko.applyBindings(viewModel);
+    </script>
+}

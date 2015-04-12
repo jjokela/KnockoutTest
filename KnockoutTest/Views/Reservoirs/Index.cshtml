@@ -1,0 +1,120 @@
+﻿@model IEnumerable<KnockoutTest.Models.ReservoirViewModel>
+
+<table class="table table-hover reservoirs">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+        </tr>
+    </thead>
+    <tbody data-bind="foreach: viewModel">
+        <tr>
+            <td data-bind="text: ReservoirId"></td>
+            <td data-bind="text: Name"></td>
+        </tr>
+    </tbody>
+</table>
+
+<div>
+    <pre data-bind="text: ko.toJSON($data, null, 2)"></pre>
+</div>
+
+<div>
+    <pre data-bind="text: ko.toJSON(viewModel.selectedReservoir, null, 2)"></pre>
+</div>
+
+<div>
+    <pre data-bind="text: ko.toJSON(viewModel.chosenTraps, null, 2)"></pre>
+</div>
+
+<table class="table table-hover traps">
+    <thead>
+        <tr>
+            <th>Selected</th>
+            <th>Id</th>
+            <th>Name</th>
+        </tr>
+    </thead>
+    <!-- ko with: viewModel.selectedReservoir -->
+    <tbody data-bind="foreach: TrapViewModels">
+        <tr>
+            <td><input type="checkbox" data-bind="checkedValue: $data, checked: viewModel.chosenTraps" /></td>
+            <td data-bind="text: TrapId"></td>
+            <td data-bind="text: Name"></td>
+        </tr>
+    </tbody>
+    <!-- /ko -->
+</table>
+
+<div>
+    <!-- ko with: viewModel.currentTrap -->
+    <span data-bind="text: Details"></span>
+    <!-- /ko -->
+</div>
+
+<button data-bind="click: postaa, enable: viewModel.chosenTraps().length > 0">Postaa</button>
+
+@*
+    <input type="checkbox" data-bind="checkedValue: $data, checked: $root.chosenItems" />
+
+    <script type="text/javascript">
+        var viewModel = {
+            items: ko.observableArray([
+                { itemName: 'Choice 1' },
+                { itemName: 'Choice 2' }
+            ]),
+            chosenItems: ko.observableArray()
+        };
+
+        ko.applyBindings(viewModel);
+    </script>*@
+
+
+
+@section scripts
+{
+    <script type="text/javascript">
+        var viewModel = ko.mapping.fromJS(@Html.Raw(Json.Encode(Model)));
+        viewModel.selectedReservoir = ko.observable();
+        viewModel.chosenTraps = ko.observableArray();
+        viewModel.currentTrap = ko.observable();
+
+        ko.applyBindings(viewModel);
+
+        $("table.reservoirs tbody tr").click(function () {
+            console.log("Handler for .click() called.");
+            selectReservoir(ko.dataFor(this), this);
+        });
+
+        // items don't exist yet when the dom is created, on() can register to those elements
+        $('body').on('click', 'table.traps tbody tr', function () {
+            console.log("Handler for .click() called.");
+            selectTrap(ko.dataFor(this), this);
+        });
+
+        var selectReservoir = function (res, element) {
+            console.log(res);
+            console.log(element);
+            viewModel.selectedReservoir(res);
+        }
+
+        var selectTrap = function (trap, element) {
+            console.log(trap);
+            console.log(element);
+            viewModel.currentTrap(trap);
+        }
+
+        var postaa = function () {
+            $.ajax({
+                url: '',
+                contentType: 'application/json',
+                type: 'POST',
+                data: JSON.stringify(ko.mapping.toJS(viewModel.chosenTraps)),
+                success: function (data) {
+                    alert('That is it!');
+                }
+            });
+        }
+    </script>
+}
+
