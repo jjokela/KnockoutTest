@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Data.Entity.Migrations.Model;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -101,6 +102,25 @@ namespace KnockoutTest.Controllers
                 return HttpNotFound();
             }
             return View(reservoir);
+        }
+
+        public class Foo
+        {
+            public string Name { get; set; }
+
+            public Foo()
+            {
+                Name = "Puuppa";
+            }
+        }
+
+        // GET: Reservoirs/Traps/5
+        public ActionResult FooBar()
+        {
+
+            var foo = new Foo();
+            return Json(foo, JsonRequestBehavior.AllowGet);
+
         }
 
         // GET: Reservoirs/Create

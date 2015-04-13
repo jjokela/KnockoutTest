@@ -1,4 +1,5 @@
-﻿@model IEnumerable<KnockoutTest.Models.ReservoirViewModel>
+﻿@using System.Web.Helpers
+@model System.Collections.Generic.IEnumerable<KnockoutTest.Models.ReservoirViewModel>
 
 <table class="table table-hover reservoirs">
     <thead>
@@ -54,6 +55,11 @@
 
 <button data-bind="click: postaa, enable: viewModel.chosenTraps().length > 0">Postaa</button>
 
+<button data-bind="click: hae">Hae</button>
+
+<pre id="janssoni"></pre>
+
+
 @*
     <input type="checkbox" data-bind="checkedValue: $data, checked: $root.chosenItems" />
 
@@ -74,47 +80,10 @@
 @section scripts
 {
     <script type="text/javascript">
-        var viewModel = ko.mapping.fromJS(@Html.Raw(Json.Encode(Model)));
-        viewModel.selectedReservoir = ko.observable();
-        viewModel.chosenTraps = ko.observableArray();
-        viewModel.currentTrap = ko.observable();
-
-        ko.applyBindings(viewModel);
-
-        $("table.reservoirs tbody tr").click(function () {
-            console.log("Handler for .click() called.");
-            selectReservoir(ko.dataFor(this), this);
-        });
-
-        // items don't exist yet when the dom is created, on() can register to those elements
-        $('body').on('click', 'table.traps tbody tr', function () {
-            console.log("Handler for .click() called.");
-            selectTrap(ko.dataFor(this), this);
-        });
-
-        var selectReservoir = function (res, element) {
-            console.log(res);
-            console.log(element);
-            viewModel.selectedReservoir(res);
-        }
-
-        var selectTrap = function (trap, element) {
-            console.log(trap);
-            console.log(element);
-            viewModel.currentTrap(trap);
-        }
-
-        var postaa = function () {
-            $.ajax({
-                url: '',
-                contentType: 'application/json',
-                type: 'POST',
-                data: JSON.stringify(ko.mapping.toJS(viewModel.chosenTraps)),
-                success: function (data) {
-                    alert('That is it!');
-                }
-            });
-        }
+        var viewModel = ko.mapping.fromJS(@Html.Raw(Json.Encode(Model)));        
     </script>
+    <script src="~/Scripts/App/targets.js"></script>
+    
+    
 }
 
