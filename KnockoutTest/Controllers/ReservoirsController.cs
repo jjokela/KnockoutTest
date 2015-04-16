@@ -80,6 +80,14 @@ namespace KnockoutTest.Controllers
             //return View(db.Reservoirs.ToList());
         }
 
+        public ActionResult Index2()
+        {
+            GenerateTestData();
+            ConvertToViewModels();
+            return View(_reservoirViewModels);
+            //return View(db.Reservoirs.ToList());
+        }
+
         [HttpPost]
         public ActionResult Index(List<TrapViewModel> traps)
         {
@@ -112,13 +120,17 @@ namespace KnockoutTest.Controllers
             {
                 Name = "Puuppa";
             }
+
+            public Foo(string name)
+            {
+                Name = name;
+            }
         }
 
         // GET: Reservoirs/Traps/5
-        public ActionResult FooBar()
+        public ActionResult FooBar(string data)
         {
-
-            var foo = new Foo();
+            var foo = new Foo(data);
             return Json(foo, JsonRequestBehavior.AllowGet);
 
         }

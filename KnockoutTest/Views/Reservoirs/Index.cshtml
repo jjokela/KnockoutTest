@@ -75,15 +75,83 @@
         ko.applyBindings(viewModel);
     </script>*@
 
+@*var bigshotJSON = '{ "name": "Diamond Joe Quimby", "cash": 10000, "phone": "5558675309" }',
+    assistantJSON = '{ "name": "Gil Gunderson", "cash": "two bits", "phone": "8005551212" }',
+    viewModel = {
+      person: ko.observable(),
+      loadBigshot: function () {
+        this.person(ko.mapping.fromJSON(bigshotJSON));
+      },
+      loadAssistant: function () {
+        this.person(ko.mapping.fromJSON(assistantJSON));
+      }
+    };*@
 
 
 @section scripts
 {
     <script type="text/javascript">
-        var viewModel = ko.mapping.fromJS(@Html.Raw(Json.Encode(Model)));        
+
+
+
+            var viewModel = ko.mapping.fromJS(@Html.Raw(Json.Encode(Model)));
+
+            viewModel.selectedReservoir = ko.observable();
+            viewModel.chosenTraps = ko.observableArray();
+            viewModel.currentTrap = ko.observable();
+
+            ko.applyBindings(viewModel);
+
+
+
+            var selectReservoir = function (res, element) {
+                console.log(res);
+                console.log(element);
+                viewModel.selectedReservoir(res);
+            }
+
+            var selectTrap = function (trap, element) {
+                console.log(trap);
+                console.log(element);
+                viewModel.currentTrap(trap);
+            }
+
+            var postaa = function () {
+                $.ajax({
+                    url: "",
+                    contentType: "application/json",
+                    type: "POST",
+                    data: JSON.stringify(ko.mapping.toJS(viewModel.chosenTraps)),
+                    success: function (data) {
+                        alert("That is it!");
+                    }
+                });
+            }
+
+            var hae = function () {
+                $.getJSON("FooBar", "data=data", function (data) {
+                    console.log("success: " + data);
+                    $("#janssoni").text(JSON.stringify(data));
+                })
+              .fail(function () {
+                  console.log("error");
+              });
+            }
+
+
+            $("table.reservoirs tbody tr").click(function () {
+                console.log("Handler for .click() called.");
+                selectReservoir(ko.dataFor(this), this);
+            });
+
+            // items don't exist yet when the dom is created, on() can register to those elements
+            $("body").on("click", "table.traps tbody tr", function () {
+                console.log("Handler for .click() called.");
+                selectTrap(ko.dataFor(this), this);
+            });
     </script>
     <script src="~/Scripts/App/targets.js"></script>
-    
-    
+
+
 }
 

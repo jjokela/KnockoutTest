@@ -1,0 +1,77 @@
+﻿@using System.Web.Helpers
+@model System.Collections.Generic.IEnumerable<KnockoutTest.Models.ReservoirViewModel>
+
+<table class="table table-hover reservoirs">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+        </tr>
+    </thead>
+    <tbody data-bind="foreach: reservoirs">
+        <tr>
+            <td data-bind="text: ReservoirId"></td>
+            <td data-bind="text: Name"></td>
+        </tr>
+    </tbody>
+</table>
+
+
+
+<table class="table table-hover traps">
+    <thead>
+        <tr>
+            <th>Selected</th>
+            <th>Id</th>
+            <th>Name</th>
+        </tr>
+    </thead>
+    <!-- ko with: selectedReservoir -->
+    <tbody data-bind="foreach: TrapViewModels">
+        <tr>
+            <td><input type="checkbox" data-bind="checkedValue: $data, checked: my.vm.chosenTraps" /></td>
+            <td data-bind="text: TrapId"></td>
+            <td data-bind="text: Name"></td>
+        </tr>
+    </tbody>
+    <!-- /ko -->
+</table>
+
+<div>
+    <!-- ko with: currentTrap -->
+    <span data-bind="text: Details"></span>
+    <!-- /ko -->
+</div>
+
+<button data-bind="click: postaa, enable: chosenTraps().length > 0">Postaa</button>
+
+<button data-bind="click: hae">Hae</button>
+
+
+<div>
+    <pre data-bind="text: ko.toJSON($data, null, 2)"></pre>
+</div>
+
+<div>
+    <pre data-bind="text: ko.toJSON(my.vm.reservoirs, null, 2)"></pre>
+</div>
+
+<div>
+    <pre data-bind="text: ko.toJSON(my.vm.selectedReservoir, null, 2)"></pre>
+</div>
+
+<div>
+    <pre data-bind="text: ko.toJSON(my.vm.chosenTraps, null, 2)"></pre>
+</div>
+
+<pre id="janssoni"></pre>
+
+@section scripts
+{
+    <script type="text/javascript">
+        var my = my || {}; //my namespace
+        my.data = @Html.Raw(Json.Encode(Model));
+    </script>
+    <script src="~/Scripts/App/targets.js"></script>
+}
+

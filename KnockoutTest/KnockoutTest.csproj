@@ -173,6 +173,7 @@
     <Content Include="Views\Reservoirs\Details.cshtml" />
     <Content Include="Views\Reservoirs\Edit.cshtml" />
     <Content Include="Views\Reservoirs\Index.cshtml" />
+    <Content Include="Views\Reservoirs\Index2.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
